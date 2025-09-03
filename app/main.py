@@ -1,18 +1,8 @@
 from fastapi import FastAPI
-from pydantic_settings import BaseSettings
 
+from app.core.config import settings
 
-class Settings(BaseSettings):
-    app_env: str = "local"
-    port: int = 8000
-
-    class Config:
-        env_file = ".env"
-
-
-settings = Settings()
-
-app: FastAPI = FastAPI(title="Whacorex", debug=(settings.app_env == "local"))
+app = FastAPI(title=settings.app_name, debug=(settings.app_env == "local"))
 
 
 @app.get("/healthz")
