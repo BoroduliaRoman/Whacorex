@@ -9,6 +9,7 @@ from app.core.errors import (
     validation_exception_handler,
 )
 from app.core.logging import logger, setup_logging
+from app.core.middleware import AccessLogMiddleware, RequestIDMiddleware
 
 setup_logging()
 
@@ -18,6 +19,10 @@ app = FastAPI(title=settings.app_name, debug=(settings.app_env == "local"))
 app.add_exception_handler(StarletteHTTPException, http_exception_holder)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(Exception, unhandled_exception_handler)
+
+# Reg MiddleWare
+app.add_middleware(RequestIDMiddleware)
+app.add_middleware(AccessLogMiddleware)
 
 
 @app.get("/healthz")
