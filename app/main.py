@@ -3,13 +3,14 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api.routers.assets import router as assets_router
+from app.api.routers.health import router as health_router
 from app.core.config import settings
 from app.core.errors import (
     http_exception_holder,
     unhandled_exception_handler,
     validation_exception_handler,
 )
-from app.core.logging import logger, setup_logging
+from app.core.logging import setup_logging
 from app.core.middleware import AccessLogMiddleware, RequestIDMiddleware
 
 setup_logging()
@@ -26,15 +27,5 @@ app.add_middleware(RequestIDMiddleware)
 app.add_middleware(AccessLogMiddleware)
 
 # Подключаем роутер
+app.include_router(health_router)
 app.include_router(assets_router)
-
-
-@app.get("/healthz")
-def healthz() -> dict[str, str]:
-    logger.info("healthz_called")
-    return {"status": "ok"}
-
-
-@app.get("/echo")
-def echo(n: int) -> dict[str, int]:
-    return {"n": n}
