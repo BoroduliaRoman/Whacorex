@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.api.routers import assets
+from app.api.routers.assets import router as assets_router
 from app.core.config import settings
 from app.core.errors import (
     http_exception_holder,
@@ -26,7 +26,7 @@ app.add_middleware(RequestIDMiddleware)
 app.add_middleware(AccessLogMiddleware)
 
 # Подключаем роутер
-app.include_router(assets.router)
+app.include_router(assets_router)
 
 
 @app.get("/healthz")
