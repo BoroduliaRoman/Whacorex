@@ -4,12 +4,15 @@ from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from starlette import status
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.responses import Response
 
 from app.core.logging import logger
 
 
 # 1) Любые HTTP-ошибки (включая 404)
-async def http_exception_holder(request: Request, exc: StarletteHTTPException):
+async def http_exception_holder(
+    request: Request, exc: StarletteHTTPException
+) -> Response:
     logger.warning(
         "http_error",
         path=str(request.url),
@@ -23,7 +26,7 @@ async def http_exception_holder(request: Request, exc: StarletteHTTPException):
 # 2) Ошибки валидации входных данных (422)
 async def validation_exception_handler(
     request: Request, exc: RequestValidationError | ValidationError
-):
+) -> Response:
     logger.info(
         "validation_error",
         path=str(request.url),
@@ -37,7 +40,7 @@ async def validation_exception_handler(
 
 
 # 3) Любая непойманная ошибка (500)
-async def unhandled_exception_handler(request: Request, exc: Exception):
+async def unhandled_exception_handler(request: Request, exc: Exception) -> Response:
     logger.error(
         "unhandled_error",
         path=str(request.url),
