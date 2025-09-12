@@ -15,6 +15,6 @@ def get_db() -> Generator:
         db.close()
 
 
-def get_asset_service(db: Session = Depends(get_db())) -> AssetService:
+def get_asset_service(db: Session = Depends(get_db)) -> AssetService:
     # сервис использует БД-CRUD (app/repositories/asset.py)
     return AssetService(db)
