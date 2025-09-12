@@ -1,15 +1,10 @@
 from collections.abc import Generator
-from functools import lru_cache
+
+from fastapi import Depends
+from sqlalchemy.orm import Session
 
 from app.db.session import SessionLocal
-from app.repositories.asset_repo import AssetRepository
 from app.services.asset_service import AssetService
-
-
-@lru_cache
-def get_asset_service() -> AssetService:
-    # один инстанс на всё приложение (пока in-memory)
-    return AssetService(AssetRepository())
 
 
 def get_db() -> Generator:
@@ -18,3 +13,8 @@ def get_db() -> Generator:
         yield db
     finally:
         db.close()
+
+
+def get_asset_service(db: Session = Depends(get_db())) -> AssetService:
+    # сервис использует БД-CRUD (app/repositories/asset.py)
+    return AssetService(db)
