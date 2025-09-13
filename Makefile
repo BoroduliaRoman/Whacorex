@@ -31,3 +31,9 @@ run:
 # Уборка кешей Python
 clean:
 	python -c "import shutil, pathlib; [shutil.rmtree(p, ignore_errors=True) for p in map(pathlib.Path, ['.mypy_cache','__pycache__'])]"
+
+# Test
+.PHONY: test
+
+test:
+	python -m pytest -q
