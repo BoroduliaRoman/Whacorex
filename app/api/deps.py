@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.db.session import SessionLocal
 from app.services.asset_service import AssetService
+from app.services.user_service import UserService
 
 
 def get_db() -> Generator:
@@ -18,3 +19,7 @@ def get_db() -> Generator:
 def get_asset_service(db: Session = Depends(get_db)) -> AssetService:
     # сервис использует БД-CRUD (app/repositories/asset.py)
     return AssetService(db)
+
+
+def get_user_service(db: Session = Depends(get_db)) -> UserService:
+    return UserService(db)

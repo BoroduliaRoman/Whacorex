@@ -8,6 +8,7 @@ from starlette.responses import Response
 
 from app.api.routers import db_check
 from app.api.routers.assets import router as assets_router
+from app.api.routers.auth import router as auth_router
 from app.api.routers.health import router as health_router
 from app.core.config import settings
 from app.core.errors import (
@@ -53,3 +54,4 @@ app.add_middleware(AccessLogMiddleware)
 app.include_router(health_router)
 app.include_router(assets_router)
 app.include_router(db_check.router)
+app.include_router(auth_router)
